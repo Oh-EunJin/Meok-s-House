@@ -28,7 +28,7 @@ import io.swagger.annotations.ApiOperation;
 
 @CrossOrigin(origins = { "*" }, maxAge = 6000)
 @RestController
-@RequestMapping("/map")
+@RequestMapping("/map") 
 public class HappyHouseMapController {
 	
 	private static final Logger logger = LoggerFactory.getLogger(HappyHouseMapController.class);
