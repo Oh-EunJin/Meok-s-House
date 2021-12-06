@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+	
+<mapper namespace="com.ssafy.happyhouse.model.mapper.TalkMapper">
+	
+	<!-- 전체 글 조회 -->
+	<select id="listTalk" resultType="talk">
+		select talk_no, login_id, title, content, talk_time, apt
+		from talk
+		order by talk_no desc
+	</select>
+	
+	<!-- 아파트 명에 대한 글 조회 -->
+	<select id="listAptTalk" resultType="talk">
+		select talk_no, login_id, title, content, talk_time, apt
+		from talk
+		where apt LIKE concat('%',#{apt},'%')
+		order by talk_no desc
+	</select>
+	
+	<!-- talk_no에 따른 질문 상세 조회 -->
+	<select id="searchTalk" resultType="talk">
+		select talk_no, login_id, title, content, talk_time, apt
+		from talk
+		where talk_no = #{talk_no}
+	</select>
+
+	<!-- 질문 글 등록 -->
+	<insert id="createTalk" parameterType="talk">
+		insert into talk(
+			login_id, title, content, apt
+		) values (
+			#{login_id}, #{title}, #{content}, #{apt}
+		)
+	</insert>
+	
+	<!-- 질문 글 수정 -->
+	<update id="modifyTalk" parameterType="talk">
+		<![CDATA[
+		update talk
+		set title = #{title},
+			content = #{content},
+			talk_time = now()
+		 where talk_no = #{talk_no}
+		]]>
+	</update>
+
+	<!-- talk_no에 따른 댓글 삭제 -->
+	<delete id="deleteComment" parameterType="String">
+		delete
+		from comments
+		where talk_no = #{talk_no}
+	</delete>
+	
+	<!-- talk_no에 따른 글 정보 삭제 -->
+	<delete id="deleteTalk" parameterType="String">
+		delete
+		from talk
+		where talk_no = #{talk_no}
+	</delete>
+	
+</mapper>

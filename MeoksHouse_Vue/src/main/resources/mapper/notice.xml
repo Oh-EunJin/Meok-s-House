@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+	
+<mapper namespace="com.ssafy.happyhouse.model.mapper.NoticeMapper">
+	
+	<!-- 등록 -->
+	<insert id="registerArticle" parameterType="NoticeDto">
+		insert into notice (login_id, subject, content, regtime)
+		values (#{login_id}, #{subject}, #{content}, now())
+		<selectKey resultType="int" keyProperty="articleNo" order="AFTER">
+			select last_insert_id()
+		</selectKey>
+	</insert>
+	
+	<select id="listArticle" resultType="NoticeDto">
+		select articleno, login_id, subject, content, regtime, hits
+		from notice
+		order by hits desc
+	</select>
+	
+	<select id="searchArticle" resultType="NoticeDto">
+		select articleno, login_id, subject, content, regtime, hits
+		from notice
+		where articleno = #{articleNo}
+	</select>
+	
+	<!-- 게시물 보기 -->
+	<select id="getArticle" parameterType="int" resultType="NoticeDto">
+		select articleno, subject, content, hits
+		from notice
+		where articleno = #{articleNo}
+	</select>
+	
+	<!-- 수정 -->
+	<update id="updateArticle" parameterType="NoticeDto">
+		update notice
+		set subject = #{subject}, content = #{content}, regtime = now()
+		where articleno = #{articleNo}
+	</update>
+	
+	<!-- 삭제 -->
+	<delete id="deleteArticle" parameterType="int">
+		delete from notice
+		where articleno = #{articleNo}
+	</delete>
+	
+	<!-- 조회 수 추가 -->
+	<update id="updateHits" parameterType="NoticeDto">
+		update notice
+		set hits = hits+1
+		where articleno = #{articleNo}
+	</update>
+</mapper>

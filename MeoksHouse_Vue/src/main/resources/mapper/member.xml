@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper
+   namespace="com.ssafy.happyhouse.model.mapper.MemberMapper">
+   
+   <!-- login -->
+   <select id="login" parameterType="member" resultType="Member">
+      select  login_id, name, password
+      from members
+      where login_id = #{login_id} and password = #{password}
+   </select>
+
+   <!-- regMember -->
+   <insert id="regMember" parameterType="Member">
+      insert into members (login_id, password, name, address, phone_number)
+      values (#{login_id}, #{password}, #{name}, #{address}, #{phone_number})
+   </insert>
+
+   <!-- getMember -->
+   <select id="getMember" parameterType="String" resultType="Member">
+      select login_id, password, name, address, phone_number
+      from members
+      where login_id = #{login_id}
+   </select>
+
+   <!-- updateMember -->
+   <update id="updateMember" parameterType="Member">
+      update members
+      <trim prefix="set" suffixOverrides=",">
+         <if test="password != null">password = #{password},</if>
+         <if test="name != null">name = #{name},</if>
+         <if test="address != null">address = #{address},</if>
+         <if test="phone_number != null">phone_number = #{phone_number},</if>
+      </trim>
+      where login_id = #{login_id}
+   </update>
+
+
+   <!-- deleteMember -->
+   <delete id="deleteMember">
+      delete from members
+      where login_id =
+      #{login_id}
+   </delete>
+
+   <!-- searchPwd -->
+   <select id="searchPwd" parameterType="String" resultType="String">
+      select password
+      from members
+      where login_id =
+      #{login_id} and name = #{name} and phone_number = #{phone_number} 
+   </select>
+
+   <!-- idCheck -->
+   <select id="idCheck" parameterType="String" resultType="int">
+      select
+      count(login_id)
+      from members
+      where login_id = #{login_id}
+   </select>
+
+</mapper>
